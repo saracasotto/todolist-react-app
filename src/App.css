@@ -1,0 +1,55 @@
+.todo-list-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3em;
+  background-color: purple;
+  height: 100vh;
+}
+
+h1 {
+    font-size: 10em;
+    color: white;
+}
+.todo-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 450px;
+  background: rgba(204, 42, 177, 0.26);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(3.5px);
+  -webkit-backdrop-filter: blur(3.5px);
+  border: 1px solid rgba(204, 42, 177, 0.12);
+  position: absolute;
+  z-index: 1;
+}
+
+.task-creation-form {
+  padding: 1em 0;
+}
+
+.task-list,
+.deleted-task {
+  min-height: 200px;
+  width: 90%;
+}
+
+input {
+    font-size: 1em;
+    padding: 5.1px 12px;
+    vertical-align: middle;
+    outline: none;
+    margin: 0;
+}
+
+.list-group-item {
+    opacity: 0.9;
+}
+
+.btn-dark {
+    font-size: 1em;
+    border-radius: 0%;
+}

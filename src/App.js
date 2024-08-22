@@ -1,15 +1,14 @@
-import Footer from './components/Footer.jsx';
-import Header from './components/Header.jsx';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import TaskList from './components/TaskList.jsx';
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import TaskList from "./components/TaskList.jsx";
+import "./App.css";
 
 function App() {
   return (
-    <div className="App">
-      <Header />
-      <TaskList />
-      <Footer />
-    </div> 
+    <div className="todo-list-wrapper">
+        <h1>Achieve It</h1>
+        <TaskList />
+    </div>
   );
 }
 
