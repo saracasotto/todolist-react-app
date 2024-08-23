@@ -8,14 +8,19 @@ const TaskList = () => {
 
   const handleAddTask = () => {
     if (task) {
-      setTaskList([...taskList, task]); // Aggiungi il nuovo compito alla lista esistente
+      const newTask = {
+        id: Date.now(),
+        name: task,
+      };
+      setTaskList([...taskList, newTask]); // Aggiungi il nuovo compito alla lista esistente
       setTask("");
     }
   };
 
   const handleRemoveTask = (taskToRemove) => {
-    // Rimuovi il compito dalla lista dei compiti attivi
-    setTaskList(taskList.filter((t) => t !== taskToRemove));
+    // Rimuovi il compito dalla lista dei compiti attivi utilizzando l'ID
+    setTaskList(taskList.filter((t) => t.id !== taskToRemove.id));
+
     // Aggiungi il compito alla lista dei compiti completati
     setClosedTasks([...closedTasks, taskToRemove]);
   };
@@ -24,6 +29,12 @@ const TaskList = () => {
     if (e.key === "Enter") {
       handleAddTask(); // Aggiungi il compito se il tasto premuto è "Enter"
     }
+  };
+
+  const handleRemoveClosedTask = (closedTaskToRemove) => {
+    setClosedTasks(
+      closedTasks.filter((task) => task.id !== closedTaskToRemove.id)
+    );
   };
 
   return (
@@ -42,29 +53,41 @@ const TaskList = () => {
       </div>
 
       <div className="task-list">
-        <ListGroup >
-          {taskList.map((t, index) => (
-            <ListGroup.Item key={index}>
-              {t}
-              <button
-                className="btn-close float-end"
-                type="button"
+        <h2>TO DO</h2>
+        <ListGroup>
+          {taskList.map((t) => (
+            <ListGroup.Item key={t.id}>
+              <input
+                className="float"
+                type="radio"
                 onClick={() => handleRemoveTask(t)}
               />
+              {t.name}
             </ListGroup.Item>
           ))}
         </ListGroup>
       </div>
 
       <div className="deleted-task">
+        <h2>ACHIEVED</h2>
         <ListGroup>
-          {closedTasks.map((t, index) => (
+          {closedTasks.map((t) => (
             <ListGroup.Item
-              key={index}
+              key={t.id}
               className="text-decoration-line-through"
             >
-              {t}
-              <button className="btn-close float-end" type="button"></button>
+              <input 
+              type="radio"
+              checked
+              />
+              {t.name}
+              <button
+                className="btn-close float-end"
+                type="button"
+                onClick={() => {
+                  handleRemoveClosedTask(t);
+                }}
+              ></button>
             </ListGroup.Item>
           ))}
         </ListGroup>
