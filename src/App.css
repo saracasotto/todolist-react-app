@@ -14,17 +14,18 @@ body {
 }
 
 h1 {
-  font-size: 10em;
+  font-size: 15em;
   color: white;
   position: fixed;
   top: 30%;
 }
 
-h2 {
+h2,
+.modal-title{
   text-align: center;
   margin: 0;
   font-size: 1.3em;
-  color: white;
+  text-shadow: grey;
 }
 
 .todo-form {
@@ -32,7 +33,7 @@ h2 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 450px;
+  width: 500px;
 
   background: rgba(135, 206, 250, 0.32);
   border-radius: 16px;
@@ -76,19 +77,57 @@ input[type="radio"] {
   -ms-transform: scale(1.3); /* IE 9 */
   -webkit-transform: scale(1.3); /* Chrome, Safari, Opera */
   transform: scale(1.3);  
-  vertical-align: middle;
   margin-right: 1em;
+  cursor: pointer;
 }
-
 
 .list-group-item {
   margin: 0.3em 0;
   border: none;
   border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1em;
+}
+
+
+.task-wrapper,
+.btn-wrapper {
+  display: flex;
+  align-items: center;
+}
+.task-wrapper {
+  width: 55%;
+
+}
+.btn-wrapper {
+  width: 45%;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .btn-dark {
   font-size: 1em;
   border-radius: 5px;
+}
+
+.edit-btn, 
+.date-btn,
+.date{
+  padding: 0;
+  margin: 0 0.5em;
+  color: black;
+  background-color: transparent;
+  border: none;
+}
+
+
+.modal-content{
+  background: rgba(135, 206, 250, 0.8);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4.9px);
+  -webkit-backdrop-filter: blur(4.9px);
 }

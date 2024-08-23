@@ -1,33 +1,49 @@
-import { ListGroup } from "react-bootstrap";
-import { useState } from "react";
+import { ListGroup, Button, CloseButton } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import EditTaskModal from "./EditTaskModal";
+import Calendar from "./Calendar";
 
 const TaskList = () => {
   const [task, setTask] = useState("");
-  const [taskList, setTaskList] = useState([]);
-  const [closedTasks, setClosedTasks] = useState([]);
+  const [taskList, setTaskList] = useState(() => {
+    const savedTaskList = localStorage.getItem("taskList");
+    return savedTaskList ? JSON.parse(savedTaskList) : [];
+  });
+
+  const [closedTasks, setClosedTasks] = useState(() => {
+    const savedClosedTasks = localStorage.getItem("closedTasks");
+    return savedClosedTasks ? JSON.parse(savedClosedTasks) : [];
+  });
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+
+  useEffect(() => {
+    localStorage.setItem("taskList", JSON.stringify(taskList));
+    localStorage.setItem("closedTasks", JSON.stringify(closedTasks));
+  }, [taskList, closedTasks]);
 
   const handleAddTask = () => {
     if (task) {
       const newTask = {
         id: Date.now(),
         name: task,
+        dueDate: null, // Aggiungi il campo per la data di scadenza
       };
-      setTaskList([...taskList, newTask]); // Aggiungi il nuovo compito alla lista esistente
+      setTaskList([...taskList, newTask]);
       setTask("");
     }
   };
 
   const handleRemoveTask = (taskToRemove) => {
-    // Rimuovi il compito dalla lista dei compiti attivi utilizzando l'ID
     setTaskList(taskList.filter((t) => t.id !== taskToRemove.id));
-
-    // Aggiungi il compito alla lista dei compiti completati
     setClosedTasks([...closedTasks, taskToRemove]);
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      handleAddTask(); // Aggiungi il compito se il tasto premuto è "Enter"
+      handleAddTask();
     }
   };
 
@@ -35,6 +51,14 @@ const TaskList = () => {
     setClosedTasks(
       closedTasks.filter((task) => task.id !== closedTaskToRemove.id)
     );
+  };
+
+  const handleRestoreTask = (taskToRestore) => {
+    // Rimuove la task dalla lista dei compiti chiusi
+    setClosedTasks(closedTasks.filter((t) => t.id !== taskToRestore.id));
+
+    // Aggiunge la task alla lista dei compiti attivi
+    setTaskList([...taskList, taskToRestore]);
   };
 
   return (
@@ -47,9 +71,9 @@ const TaskList = () => {
           placeholder="Add a new task"
           onKeyDown={handleKeyDown}
         />
-        <button type="button" className="btn btn-dark" onClick={handleAddTask}>
-          Add task
-        </button>
+        <Button className="btn btn-dark" onClick={handleAddTask}>
+          Add Task
+        </Button>
       </div>
 
       <div className="task-list">
@@ -57,12 +81,45 @@ const TaskList = () => {
         <ListGroup>
           {taskList.map((t) => (
             <ListGroup.Item key={t.id}>
-              <input
-                className="float"
-                type="radio"
-                onClick={() => handleRemoveTask(t)}
-              />
-              {t.name}
+              <div className="task-wrapper">
+                <input
+                  className="float"
+                  type="radio"
+                  onClick={() => handleRemoveTask(t)}
+                />
+                {t.name}
+              </div>
+              <div className="btn-wrapper">
+                {t.dueDate && (
+                  <span className="date"
+                  style={{
+                    color:
+                      new Date(t.dueDate).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
+                        ? "red"
+                        : "black",
+                  }}>
+                    {new Date(t.dueDate).toLocaleDateString()}
+                  </span>
+                )}
+                <button
+                  className="edit-btn"
+                  onClick={() => {
+                    setSelectedTask(t);
+                    setShowEditModal(true);
+                  }}
+                >
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <button
+                  className="date-btn"
+                  onClick={() => {
+                    setSelectedTask(t);
+                    setShowCalendar(true);
+                  }}
+                >
+                  <i class="bi bi-calendar3-event"></i>
+                </button>
+              </div>
             </ListGroup.Item>
           ))}
         </ListGroup>
@@ -72,26 +129,65 @@ const TaskList = () => {
         <h2>ACHIEVED</h2>
         <ListGroup>
           {closedTasks.map((t) => (
-            <ListGroup.Item
-              key={t.id}
-              className="text-decoration-line-through"
-            >
-              <input 
-              type="radio"
-              checked
-              />
-              {t.name}
-              <button
-                className="btn-close float-end"
-                type="button"
-                onClick={() => {
-                  handleRemoveClosedTask(t);
-                }}
-              ></button>
+            <ListGroup.Item key={t.id} className="text-decoration-line-through">
+              <div className="task-wrapper">
+                <input
+                  type="radio"
+                  checked
+                  readOnly
+                  onClick={() => handleRestoreTask(t)}
+                />
+                {t.name}
+              </div>
+              <div className="btn-wrapper">
+                {t.dueDate && (
+                  <span
+                    className="date"
+                    style={{
+                      color:
+                        new Date(t.dueDate).setHours(0, 0, 0, 0) <
+                        new Date().setHours(0, 0, 0, 0)
+                          ? "red"
+                          : "black",
+                    }}
+                  >
+                    {new Date(t.dueDate).toLocaleDateString()}
+                  </span>
+                )}
+                <CloseButton
+                  onClick={() => handleRemoveClosedTask(t)}
+                ></CloseButton>
+              </div>
             </ListGroup.Item>
           ))}
         </ListGroup>
       </div>
+
+      <EditTaskModal
+        task={selectedTask}
+        show={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        onSave={(newName) => {
+          setTaskList(
+            taskList.map((task) =>
+              task.id === selectedTask.id ? { ...task, name: newName } : task
+            )
+          );
+        }}
+      />
+
+      <Calendar
+        task={selectedTask}
+        show={showCalendar}
+        onClose={() => setShowCalendar(false)}
+        onSave={(date) => {
+          setTaskList(
+            taskList.map((task) =>
+              task.id === selectedTask.id ? { ...task, dueDate: date } : task
+            )
+          );
+        }}
+      />
     </div>
   );
 };
