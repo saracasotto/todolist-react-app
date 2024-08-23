@@ -20,7 +20,8 @@ h1 {
   top: 30%;
 }
 
-h2,
+/*QUI ASSEGNARE CLASSE PER TUTTI I TITOLI*/
+h2,  
 .modal-title{
   text-align: center;
   margin: 0;
