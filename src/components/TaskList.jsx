@@ -129,8 +129,8 @@ const TaskList = () => {
         <h2>ACHIEVED</h2>
         <ListGroup>
           {closedTasks.map((t) => (
-            <ListGroup.Item key={t.id} className="text-decoration-line-through">
-              <div className="task-wrapper">
+            <ListGroup.Item key={t.id}>
+              <div className="task-wrapper text-decoration-line-through">
                 <input
                   type="radio"
                   checked

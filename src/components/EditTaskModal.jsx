@@ -17,6 +17,12 @@ const EditTaskModal = ({ task, show, onClose, onSave }) => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSave();
+    }
+  };
+
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
@@ -28,6 +34,7 @@ const EditTaskModal = ({ task, show, onClose, onSave }) => {
           className="form-control"
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
       </Modal.Body>
       <Modal.Footer>

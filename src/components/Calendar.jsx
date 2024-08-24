@@ -9,6 +9,12 @@ const Calendar = ({ task, show, onClose, onSave }) => {
     onClose();
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSave();
+    }
+  };
+
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
@@ -21,13 +27,15 @@ const Calendar = ({ task, show, onClose, onSave }) => {
           value={selectedDate}
           min={new Date().toISOString().split("T")[0]}
           onChange={(e) => setSelectedDate(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleSave}>
+        <Button variant="primary" 
+        onClick={handleSave}>
           Save Date
         </Button>
       </Modal.Footer>
