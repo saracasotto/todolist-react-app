@@ -1,7 +1,8 @@
 import { ListGroup, Button, CloseButton } from "react-bootstrap";
 import { useState, useEffect } from "react";
-import EditTaskModal from "./EditTaskModal";
-import Calendar from "./Calendar";
+import EditTaskModal from "../Modals/EditTaskModal";
+import Calendar from "../Modals/Calendar";
+import "./TaskForm.css"
 
 const TaskList = () => {
   const [task, setTask] = useState("");

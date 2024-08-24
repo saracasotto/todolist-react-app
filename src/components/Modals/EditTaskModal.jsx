@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import "./Modals.css"
 
 const EditTaskModal = ({ task, show, onClose, onSave }) => {
   const [newName, setNewName] = useState('');

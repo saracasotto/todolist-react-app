@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import "./Modals.css"
 
 const Calendar = ({ task, show, onClose, onSave }) => {
   const [selectedDate, setSelectedDate] = useState(task ? task.dueDate : '');

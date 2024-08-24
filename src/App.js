@@ -1,13 +1,13 @@
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import TaskList from "./components/TaskList.jsx";
+import TaskForm from "./components/TaskForm/TaskForm.jsx"
 import "./App.css";
 
 function App() {
   return (
     <div className="todo-list-wrapper">
         <h1>Achieve It</h1>
-        <TaskList />
+        <TaskForm />
     </div>
   );
 }
